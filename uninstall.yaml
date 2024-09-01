@@ -1,0 +1,26 @@
+- name: Ping all hosts
+  hosts: vm-group
+  become: true
+  tasks:
+    - name: Ping the host
+      ansible.builtin.ping:
+    # Supprimer le container Jenkins et son image
+    - name: Remove Jenkins container
+      ansible.builtin.shell: docker rm -f jenkins_container
+    - name: Remove Jenkins image
+      ansible.builtin.shell: docker rmi jenkins/jenkins:lts-jdk17
+    - name: Remove Jenkins volume
+      ansible.builtin.shell: docker volume rm jenkins_home
+    # Supprimer le container Postgres et son image
+    - name: Remove Postgres container
+      ansible.builtin.shell: docker rm -f postgres
+    - name: Remove Postgres image
+      ansible.builtin.shell: docker rmi postgres
+    # Supprimer le container Sonarqube et son image
+    - name: Remove Sonarqube container
+      ansible.builtin.shell: docker rm -f sonarqube
+    - name: Remove Sonarqube image
+      ansible.builtin.shell: docker rmi sonarqube
+    # Supprimer le réseau ci-cd
+    - name: Remove a network
+      ansible.builtin.shell: docker network rm ci-cd
